@@ -11,6 +11,8 @@ int main(void)
 	while (i < 58)
 	{
 		putchar(i++);
+		if (i == 58)
+			continue;
 		putchar(44);
 		putchar(32);
 	}
