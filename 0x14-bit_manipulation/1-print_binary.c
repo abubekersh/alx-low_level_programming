@@ -22,5 +22,5 @@ void print_binary(unsigned long int n)
 	{
 		print_binary(div);
 	}
-	putchar(i + '0');
+	_putchar(i + '0');
 }
