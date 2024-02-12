@@ -13,9 +13,11 @@ void copy_to(const char *file_from, const char *file_to)
 	char ch[1024];
 	ssize_t bwr;
 	ssize_t brd;
+	mode_t  prem;
 
+	prem = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
 	fd1 = open(file_from, O_RDONLY);
-	fd2 = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+	fd2 = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, prem);
 	if (fd1 == -1)
 	{
 		dprintf(STDOUT_FILENO, "Error: Can't read from file %s\n", file_from);
@@ -33,7 +35,7 @@ void copy_to(const char *file_from, const char *file_to)
 		{
 			close(fd1);
 			close(fd2);
-			dprintf(STDOUT_FILENO,"Error: Can't write to %s\n", file_to);
+			dprintf(STDOUT_FILENO, "Error: Can't write to %s\n", file_to);
 			exit(99);
 		}
 	}
@@ -45,7 +47,7 @@ void copy_to(const char *file_from, const char *file_to)
 	if (close(fd2) == -1)
 	{
 		dprintf(STDOUT_FILENO, "Error: Can't close fd %d\n", fd2);
-                exit(100);
+		exit(100);
 	}
 	close(fd1);
 	close(fd2);
@@ -59,7 +61,6 @@ void copy_to(const char *file_from, const char *file_to)
  */
 int main(int argc, char **argv)
 {
-	
 	if (argc != 3)
 	{
 		dprintf(STDOUT_FILENO, "Usage: cp file_from file_to");
