@@ -15,17 +15,17 @@ void copy_to(const char *file_from, const char *file_to)
 	ssize_t brd;
 	mode_t  prem;
 
-	prem = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+	prem = 0664;
 	fd1 = open(file_from, O_RDONLY);
 	fd2 = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, prem);
 	if (fd1 == -1)
 	{
-		dprintf(STDOUT_FILENO, "Error: Can't read from file %s\n", file_from);
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
 		exit(98);
 	}
 	if (fd2 == -1)
 	{
-		dprintf(STDOUT_FILENO, "Error: Can't write to %s\n", file_to);
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file_to);
 		exit(99);
 	}
 	while ((brd = read(fd1, &ch, 1024)) != 0)
@@ -35,18 +35,18 @@ void copy_to(const char *file_from, const char *file_to)
 		{
 			close(fd1);
 			close(fd2);
-			dprintf(STDOUT_FILENO, "Error: Can't write to %s\n", file_to);
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file_to);
 			exit(99);
 		}
 	}
 	if (close(fd1) == -1)
 	{
-		dprintf(STDOUT_FILENO, "Error: Can't close fd %d\n", fd1);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd1);
 		exit(100);
 	}
 	if (close(fd2) == -1)
 	{
-		dprintf(STDOUT_FILENO, "Error: Can't close fd %d\n", fd2);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd2);
 		exit(100);
 	}
 	close(fd1);
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 3)
 	{
-		dprintf(STDOUT_FILENO, "Usage: cp file_from file_to");
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to");
 		exit(97);
 	}
 	copy_to(argv[1], argv[2]);
